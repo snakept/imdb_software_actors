@@ -2,6 +2,7 @@ from PyQt5.QtGui import QStandardItem, QStandardItemModel, QTextList
 import requests
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QListView, QMainWindow
+import pandas as pd
 import sys
 
 
@@ -23,12 +24,9 @@ def window(actors, width, height):
 
 
 url = "https://imdb-api.com/en/API/IMDbList/k_vhvsnz5j/ls053501318"
+df = pd.read_json(url)
 
-response = requests.get(url)
-
-json_data = response.json() if response and response.status_code == 200 else None
-
-actors = json_data['items']
+actors = df['items']
 
 actors_list = []
 for actor in actors:

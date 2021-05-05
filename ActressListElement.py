@@ -6,7 +6,7 @@ from io import BytesIO
 
 class ActressListElement():
     def __init__(self, name, thumbnailData):
-        self.pixMap = QPixmap(60, 60)
-        QPixmap.loadFromData(self.pixMap, thumbnailData, "JPG")
+        self.pixmap = QPixmap(60, 60)
+        QPixmap.loadFromData(self.pixmap, thumbnailData, "JPG")
         self.name = name
-        self.icon = QIcon(self.pixMap)
+        self.icon = QIcon(self.pixmap)

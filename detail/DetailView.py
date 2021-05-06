@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QLabel
 from PyQt6.QtGui import QPixmap
 
-from DetailViewModel import DetailViewModel
+from detail.DetailViewModel import DetailViewModel
 
 
 class DetailView(QWidget):
@@ -21,5 +21,4 @@ class DetailView(QWidget):
         self.genresLabel.setText("bla, bla, blaaa")
 
         # All Movies
-        detailViewModel = DetailViewModel()
-        self.moviesTableView.setModel(detailViewModel)
+        self.moviesTableView

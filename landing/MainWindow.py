@@ -4,19 +4,19 @@ from PyQt6.QtGui import QImage, QStandardItemModel
 from PyQt6.QtWidgets import QListWidgetItem, QMainWindow, QLabel, QListWidget
 from PyQt6.uic import loadUi
 
-from DetailView import DetailView
-from ActressesListModel import ActressesListModel
 from ActressListElement import ActressListElement
-from AccessActressesListThread import AccessActressesListThread
+from detail.DetailView import DetailView
+from landing.ActressesListModel import ActressesListModel
+from landing.AccessActressesListThread import AccessActressesListThread
 from PyQt6.QtWidgets import QItemDelegate
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, apiUrl):
+    def __init__(self, path, apiUrl):
         super().__init__()
         self.detailView = DetailView()
-        loadUi("Layouts/main_view.ui", self)
-        loadUi("Layouts/detail.ui", self.detailView)
+        loadUi(path + "/Layouts/main_view.ui", self)
+        loadUi(path + "/Layouts/detail.ui", self.detailView)
 
         self.actressesUrl = apiUrl
 

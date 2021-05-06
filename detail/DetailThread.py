@@ -9,17 +9,21 @@ class DetailThread(QThread):
 
     moviesListFinished = pyqtSignal(bool)
 
-    def __init__(self, movies, description, apiUrl):
+    def __init__(self, actressDf, actressUrl):
         super().__init__()
-        self.apiUrl = apiUrl
-        self.movies = movies
-        self.description = description
+        self.actressDf = actressDf
+        self.actressUrl = actressUrl
 
     def run(self):
+
+        self.fetchActressDataFromUrl()
+        self.moviesListFinished.emit(True)
+
+    def fetchActressDataFromUrl(self):
         ssl._create_default_https_context = ssl._create_unverified_context
 
-        jsonData = req.get(self.apiUrl).json()
-        self.description = jsonData['summary']
-        for movie in jsonData['castMovies']:
-            self.movies.append(movie)
-        self.moviesListFinished.emit(True)
+        self.actressDf = pd.read_json(self.actressUrl)
+        try:
+            pass
+        except:
+            print("Couldn't read data from " + self.actressUrl)

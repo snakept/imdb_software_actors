@@ -9,16 +9,21 @@ API_URL = "https://imdb-api.com/API/Name/"
 
 class DetailView(QWidget):
 
-    def __init__(self, apiKey):
+    def __init__(self, apiKey, path):
         super().__init__()
+        self.path = path
         self.apiKey = apiKey
 
     def initContent(self, pixmap, name, id):
         self.id = id
-        self.actressApiUrl = API_URL + self.apiKey + "/" + self.id
+        self.actressUrl = ""
+        if self.apiKey == "t":
+            self.actressUrl = self.path + "/TestData_MelGibson.json"
+        else:
+            self.actressUrl = API_URL + self.apiKey + "/" + self.id
+
+        self.actressDf = []
         self.initUi(pixmap, name)
-        self.description = ""
-        self.movies = []
 
         self.initThread()
         self.runThread()
@@ -31,26 +36,31 @@ class DetailView(QWidget):
         # NameLabel
         self.nameLabel.setText(name)
 
+    def setUiContent(self):
         # GenresLabel
         self.genresLabel.setText(self.id)
+
+        # About Text
+        # self.aboutText.setText(self.actressDf['summary'])
 
         # All Movies
         header = ["Title", "Year", "Awards", "Genre"]
         self.moviesTableView.setColumnCount(4)
         self.moviesTableView.setHorizontalHeaderLabels(header)
-
-    def fillMoviesTableView(self):
-        for i, movie in enumerate(self.movies):
-            self.moviesTableView.setItem(
-                i, 0, QTableWidgetItem(movie['title']))
-            self.moviesTableView.setItem(
-                i, 1, QTableWidgetItem(movie['year']))
-            print(i)
+        self.moviesTableView.verticalHeader().setVisible(False)
+        # movies = self.actressDf['castMovies']
+        # for i, movie in enumerate(movies):
+        #     self.moviesTableView.insertRow(i)
+        #     self.moviesTableView.setItem(
+        #         i, 0, QTableWidgetItem(movie['title']))
+        #     self.moviesTableView.setItem(
+        #         i, 1, QTableWidgetItem(movie['year']))
+        print(self.actressDf)
 
     def initThread(self):
         self.detailThread = DetailThread(
-            self.movies, self.description, self.actressApiUrl)
-        self.detailThread.moviesListFinished.connect(self.fillMoviesTableView)
+            self.actressDf, self.actressUrl)
+        self.detailThread.moviesListFinished.connect(self.setUiContent)
 
     def runThread(self):
         self.detailThread.run()

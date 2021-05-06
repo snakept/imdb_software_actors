@@ -1,4 +1,5 @@
 from PyQt6.QtCore import QThread, pyqtSignal
+import json
 import pandas as pd
 import requests as req
 from ActressListElement import ActressListElement
@@ -10,26 +11,37 @@ class AccessActressesListThread(QThread):
     started = pyqtSignal(bool)
     finished = pyqtSignal(bool)
 
-    def __init__(self, imdbLink, actressesListData):
+    def __init__(self, actressesUrl, actressesListData):
         QThread.__init__(self)
-        self.imdbLink = imdbLink
+        self.actressesUrl = actressesUrl
         self.actressesListData = actressesListData
         self.actressesDf = []
 
-    def fetchActressesData(self):
+    def fetchActressesDataFromUrl(self):
         self.actressesListData.clear()
         self.started.emit(True)
-        actressesRequest = req.get(self.imdbLink)
+        actressesRequest = req.get(self.actressesUrl)
         if actressesRequest.status_code == 200:
             actressesData = pd.read_json(actressesRequest.content)
             self.actressesDf = actressesData['items']
 
             if len(self.actressesDf) == 0:
-                print("No data provided for the link " + self.imdbLink)
+                print("No data provided for the link " + self.actressesUrl)
                 return
         else:
             print("Error occured fetch didn't succeed. Error code: " +
                   actressesRequest.status_code)
+
+    def loadFromFile(self):
+        self.actressesListData.clear()
+        self.started.emit(True)
+
+        try:
+            df = pd.read_json_normalize(self.actressesUrl)
+            self.actressesDf = df['items']
+
+        except:
+            print("Couldn't read data from " + self.actressesUrl)
 
     def fetchActress(self, actress):
 
@@ -40,7 +52,10 @@ class AccessActressesListThread(QThread):
         self.actressSignal.emit(True)
 
     def run(self):
-        self.fetchActressesData()
+        if self.actressesUrl.find("http") != -1:
+            self.fetchActressesDataFromUrl()
+        else:
+            self.loadFromFile()
 
         for actress in self.actressesDf:
             self.fetchActress(actress)

@@ -12,13 +12,13 @@ from PyQt6.QtWidgets import QItemDelegate
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, path, apiUrl):
+    def __init__(self, path, apiKey):
         super().__init__()
-        self.detailView = DetailView()
+        self.detailView = DetailView(apiKey)
         loadUi(path + "/Layouts/main_view.ui", self)
         loadUi(path + "/Layouts/detail.ui", self.detailView)
 
-        self.actressesUrl = apiUrl
+        self.actressesApiUrl = "https://imdb-api.com/en/API/IMDbList/" + apiKey + "/ls053501318"
 
         self.actressesList = []
         self.model = ActressesListModel(self.actressesList)
@@ -31,7 +31,8 @@ class MainWindow(QMainWindow):
         i = index.row()
         actressPixmap = self.actressesList[i].pixmap
         actressName = self.actressesList[i].name
-        self.detailView.initUI(actressPixmap, actressName)
+        actressId = self.actressesList[i].id
+        self.detailView.initContent(actressPixmap, actressName, actressId)
         self.detailView.show()
 
     def fetchButtonClicked(self):
@@ -44,7 +45,7 @@ class MainWindow(QMainWindow):
 
     def startFetchingActresses(self):
         self.fetchThread = AccessActressesListThread(
-            self.actressesUrl, self.actressesList)
+            self.actressesApiUrl, self.actressesList)
         self.fetchThread.started.connect(self.model.layoutChanged.emit)
         self.fetchThread.actressSignal.connect(self.model.layoutChanged.emit)
         self.fetchThread.finished.connect(self.setFetchButtonEnabled)

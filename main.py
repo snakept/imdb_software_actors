@@ -4,13 +4,18 @@ from PyQt6.QtWidgets import QApplication
 
 from landing.MainWindow import MainWindow
 
-API_URL = "https://imdb-api.com/en/API/IMDbList/k_vhvsnz5j/ls053501318"
+DEFAULT_API_KEY = "k_vhvsnz5j"
 
 if __name__ == "__main__":
     path = os.path.realpath(__file__)
     path = os.path.dirname(path)
 
-    app = QApplication([])
-    window = MainWindow(path, API_URL)
+    app = QApplication(sys.argv)
+
+    apiKey = DEFAULT_API_KEY
+    if len(sys.argv) > 1:
+        apiKey = sys.argv[1]
+
+    window = MainWindow(path, apiKey)
     window.show()
     sys.exit(app.exec())

@@ -19,15 +19,23 @@ class AccessActressesListThread(QThread):
     def fetchActressesData(self):
         self.actressesListData.clear()
         self.started.emit(True)
-        actressesRequest = req.get(self.imdbLink).content
-        actressesData = pd.read_json(actressesRequest)
-        self.actressesDf = actressesData['items']
+        actressesRequest = req.get(self.imdbLink)
+        if actressesRequest.status_code == 200:
+            actressesData = pd.read_json(actressesRequest.content)
+            self.actressesDf = actressesData['items']
+
+            if len(self.actressesDf) == 0:
+                print("No data provided for the link " + self.imdbLink)
+                return
+        else:
+            print("Error occured fetch didn't succeed. Error code: " +
+                  actressesRequest.status_code)
 
     def fetchActress(self, actress):
 
         imageBin = req.get(actress['image']).content
         actressListItem = ActressListElement(
-            actress['fullTitle'], imageBin)
+            actress['fullTitle'], actress['id'], imageBin)
         self.actressesListData.append(actressListItem)
         self.actressSignal.emit(True)
 

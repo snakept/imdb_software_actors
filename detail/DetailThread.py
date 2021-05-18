@@ -9,9 +9,10 @@ class DetailThread(QThread):
 
     moviesListFinished = pyqtSignal(bool)
 
-    def __init__(self, actressDf, actressUrl):
+    def __init__(self, moviesDf, about, actressUrl):
         super().__init__()
-        self.actressDf = actressDf
+        self.moviesDf = moviesDf
+        self.about = about
         self.actressUrl = actressUrl
 
     def run(self):
@@ -22,7 +23,10 @@ class DetailThread(QThread):
     def fetchActressDataFromUrl(self):
         ssl._create_default_https_context = ssl._create_unverified_context
 
-        self.actressDf = pd.read_json(self.actressUrl)
+        jsonData = req.get(self.actressUrl).json()
+        self.moviesDf = pd.DataFrame(jsonData['knownFor'])
+        self.about = jsonData['summary']
+
         try:
             pass
         except:

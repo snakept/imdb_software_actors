@@ -1,5 +1,4 @@
 from PyQt6.QtCore import QThread, pyqtSignal
-import json
 import pandas as pd
 import requests as req
 from ActressListElement import ActressListElement

@@ -52,7 +52,6 @@ class MainWindow(QMainWindow):
     def startFetchingActresses(self):
         self.fetchThread = AccessActressesListThread(
             self.actressesUrl, self.actressesList)
-        self.fetchThread.started.connect(self.model.layoutChanged.emit)
         self.fetchThread.actressSignal.connect(self.model.layoutChanged.emit)
         self.fetchThread.finished.connect(self.setFetchButtonEnabled)
         self.fetchThread.start()

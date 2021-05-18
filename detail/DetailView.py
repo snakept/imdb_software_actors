@@ -22,7 +22,8 @@ class DetailView(QWidget):
         else:
             self.actressUrl = API_URL + self.apiKey + "/" + self.id
 
-        self.actressDf = []
+        self.moviesDf = []
+        self.about = ""
         self.initUi(pixmap, name)
 
         self.initThread()
@@ -41,7 +42,7 @@ class DetailView(QWidget):
         self.genresLabel.setText(self.id)
 
         # About Text
-        # self.aboutText.setText(self.actressDf['summary'])
+        self.aboutText.setText(self.about)
 
         # All Movies
         header = ["Title", "Year", "Awards", "Genre"]
@@ -55,11 +56,10 @@ class DetailView(QWidget):
         #         i, 0, QTableWidgetItem(movie['title']))
         #     self.moviesTableView.setItem(
         #         i, 1, QTableWidgetItem(movie['year']))
-        print(self.actressDf)
 
     def initThread(self):
         self.detailThread = DetailThread(
-            self.actressDf, self.actressUrl)
+            self.moviesDf, self.about, self.actressUrl)
         self.detailThread.moviesListFinished.connect(self.setUiContent)
 
     def runThread(self):

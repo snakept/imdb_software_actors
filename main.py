@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import QApplication
 from landing.MainWindow import MainWindow
 
 DEFAULT_API_KEY = "k_vhvsnz5j"
+OTHER_API_KEY = "k_66k35hbm"
 
 if __name__ == "__main__":
     path = os.path.realpath(__file__)
@@ -12,7 +13,7 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
 
-    apiKey = DEFAULT_API_KEY
+    apiKey = OTHER_API_KEY
     if len(sys.argv) > 1:
         apiKey = sys.argv[1]
 

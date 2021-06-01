@@ -30,7 +30,6 @@ class MainWindow(QMainWindow):
         actressName = self.actressesList[i].name
         actressId = self.actressesList[i].id
         self.detailView.initContent(actressPixmap, actressName, actressId)
-        self.detailView.runThread()
         self.detailView.show()
 
     def fetchButtonClicked(self):

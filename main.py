@@ -16,6 +16,6 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         apiKey = sys.argv[1]
 
-    window = MainWindow(path, apiKey)
+    window = MainWindow(apiKey, path)
     window.show()
     sys.exit(app.exec())

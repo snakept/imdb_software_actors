@@ -1,7 +1,8 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QTableWidgetItem
-from PyQt6.QtGui import QPixmap
+import os
+from PyQt6.QtWidgets import QTableWidgetItem, QWidget
+from PyQt6.uic import loadUi
 
-from detail.DetailViewModel import DetailViewModel
+from detail.ActressDetail import ActressDetail
 from detail.DetailThread import DetailThread
 
 API_URL = "https://imdb-api.com/API/Name/"
@@ -11,55 +12,53 @@ class DetailView(QWidget):
 
     def __init__(self, apiKey, path):
         super().__init__()
-        self.path = path
         self.apiKey = apiKey
+        self.path = path
 
     def initContent(self, pixmap, name, id):
-        self.id = id
-        self.actressUrl = ""
-        if self.apiKey == "t":
-            self.actressUrl = self.path + "/TestData_MelGibson.json"
-        else:
-            self.actressUrl = API_URL + self.apiKey + "/" + self.id
+        self.actressUrl = API_URL + self.apiKey + "/" + id
+        self.actressDetail = ActressDetail(id, name, pixmap)
 
-        self.moviesDf = []
-        self.about = ""
-        self.initUi(pixmap, name)
+        self.initUi()
 
         self.initThread()
-        self.runThread()
 
-    def initUi(self, pixmap, name):
+    def initUi(self):
         # ImageLabel
-        pixmap = pixmap.scaledToHeight(150)
+        pixmap = self.actressDetail.pixmap.scaledToHeight(150)
         self.imageLabel.setPixmap(pixmap)
 
         # NameLabel
-        self.nameLabel.setText(name)
+        self.nameLabel.setText(self.actressDetail.name)
 
     def setUiContent(self):
         # GenresLabel
-        self.genresLabel.setText(self.id)
+        self.genresLabel.setText(self.actressDetail.id)
 
         # About Text
-        self.aboutText.setText(self.about)
+        self.aboutText.setPlainText(self.actressDetail.about)
 
         # All Movies
         header = ["Title", "Year", "Awards", "Genre"]
         self.moviesTableView.setColumnCount(4)
         self.moviesTableView.setHorizontalHeaderLabels(header)
         self.moviesTableView.verticalHeader().setVisible(False)
-        # movies = self.actressDf['castMovies']
-        # for i, movie in enumerate(movies):
-        #     self.moviesTableView.insertRow(i)
-        #     self.moviesTableView.setItem(
-        #         i, 0, QTableWidgetItem(movie['title']))
-        #     self.moviesTableView.setItem(
-        #         i, 1, QTableWidgetItem(movie['year']))
+        movies = self.actressDetail.moviesDf
+
+        for i, movie in movies.iterrows():
+            title = movie['title']
+            year = movie['year']
+
+            self.moviesTableView.insertRow(i)
+            self.moviesTableView.setItem(
+                i, 0, QTableWidgetItem(title))
+            self.moviesTableView.setItem(
+                i, 1, QTableWidgetItem(year))
+
+        self.moviesTableView.resizeColumnsToContents()
 
     def initThread(self):
-        self.detailThread = DetailThread(
-            self.moviesDf, self.about, self.actressUrl)
+        self.detailThread = DetailThread(self.actressUrl, self.actressDetail)
         self.detailThread.moviesListFinished.connect(self.setUiContent)
 
     def runThread(self):

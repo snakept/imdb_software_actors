@@ -6,7 +6,7 @@ from ActressListElement import ActressListElement
 
 class AccessActressesListThread(QThread):
 
-    actressSignal = pyqtSignal(bool)
+    actressAddedSignal = pyqtSignal(bool)
     started = pyqtSignal(bool)
     finished = pyqtSignal(bool)
 
@@ -31,6 +31,7 @@ class AccessActressesListThread(QThread):
             print("Error occured fetch didn't succeed. Error code: " +
                   actressesRequest.status_code)
 
+    # test
     def loadFromFile(self):
         self.actressesListData.clear()
         self.started.emit(True)
@@ -48,7 +49,7 @@ class AccessActressesListThread(QThread):
         actressListItem = ActressListElement(
             actress['fullTitle'], actress['id'], imageBin)
         self.actressesListData.append(actressListItem)
-        self.actressSignal.emit(True)
+        self.actressAddedSignal.emit(True)
 
     def run(self):
         if self.actressesUrl.find("http") != -1:

@@ -1,5 +1,4 @@
 import ssl
-import json
 import requests as req
 import pandas as pd
 from PyQt6.QtCore import QThread, pyqtSignal
@@ -9,11 +8,10 @@ class DetailThread(QThread):
 
     moviesListFinished = pyqtSignal(bool)
 
-    def __init__(self, moviesDf, about, actressUrl):
+    def __init__(self, actressUrl, actressDetail):
         super().__init__()
-        self.moviesDf = moviesDf
-        self.about = about
         self.actressUrl = actressUrl
+        self.actressDetail = actressDetail
 
     def run(self):
 
@@ -24,10 +22,6 @@ class DetailThread(QThread):
         ssl._create_default_https_context = ssl._create_unverified_context
 
         jsonData = req.get(self.actressUrl).json()
-        self.moviesDf = pd.DataFrame(jsonData['knownFor'])
-        self.about = jsonData['summary']
-
-        try:
-            pass
-        except:
-            print("Couldn't read data from " + self.actressUrl)
+        df = pd.DataFrame(jsonData['castMovies'])
+        self.actressDetail.moviesDf = df[df['role'] == 'Actor']
+        self.actressDetail.about = jsonData['summary']

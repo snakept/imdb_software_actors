@@ -64,7 +64,7 @@ class MoviesDataWorker(QObject):
 
 class ActressAwardsDataWorker(QObject):
 
-    fetchedData = pyqtSignal(int, int)
+    fetchedData = pyqtSignal(dict)
 
     def __init__(self, actressId):
         super().__init__()
@@ -78,23 +78,34 @@ class ActressAwardsDataWorker(QObject):
         page = req.get(url)
         soup = BeautifulSoup(page.text, 'html.parser')
 
-        main = soup.find('div', attrs={'id': 'main'})
+        awardsSoup = soup.find_all('table', attrs={'class': 'awards'})
+        awards = {"title": [], "outcome": [], "year": []}
+        for award in awardsSoup:
 
-        wins = 0
-        nominations = 0
-        if main:
-            awards = main.find('div', attrs={'class': 'desc'}).text
-            wins = getNumberBeforeSubString(awards, 'win')
-            nominations = getNumberBeforeSubString(awards, 'nomination')
+            # award title
+            awardTitle = award.find(class_="award_category").text.strip()
+            awards['title'].append(awardTitle)
 
-        self.fetchedData.emit(wins, nominations)
+            # outcome
+            outcomeWrapper = award.find(class_="award_outcome")
+            outcome = outcomeWrapper.findChildren()[0].text.strip()
+            awards['outcome'].append(outcome)
+
+            # year
+            yearWrapper = award.find(class_="award_year")
+            year = yearWrapper.findChildren()[0].text.strip()
+            awards['year'].append(year)
+
+        self.fetchedData.emit(awards)
 
 
 class DetailView(QWidget):
 
+    # signals for MovieDataWorker
     requestedMovieRatingFetch = pyqtSignal()
     requestToQuitThread = pyqtSignal()
 
+    # signal for ActressAwardsDataWorker
     requestActressAwards = pyqtSignal()
 
     sumRating = 0.0
@@ -146,6 +157,12 @@ class DetailView(QWidget):
         # About Text
         self.aboutText.setPlainText(self.actressDetail.about)
 
+        # Awards Table
+        self.awardsTable.setColumnCount(3)
+        headerAwards = ["Title", "Outcome", "Year"]
+        self.awardsTable.setHorizontalHeaderLabels(headerAwards)
+        self.awardsTable.verticalHeader().setVisible(False)
+
         # movies table
         self.moviesTableView.setColumnCount(5)
         headerMovies = ["Title", "Year", "Awards", "Genre", "Rating"]
@@ -192,14 +209,8 @@ class DetailView(QWidget):
         self.moviesTableView.setItem(
             index, 2, QTableWidgetItem(awards))
 
-        # Add awards to actress
-        self.actressDetail.nominations += getNumberBeforeSubString(
-            awards, "nomination")
-        self.actressDetail.awards += getNumberBeforeSubString(
-            awards, "win")
-
         # add data to genre list
-        if genre not in self.actressDetail.genres or genre.__contains__("-") == False:
+        if genre not in self.actressDetail.genres and genre.__contains__("-") == False:
             self.actressDetail.genres.append(genre)
 
             # only append comma when at least a genre exists
@@ -247,13 +258,22 @@ class DetailView(QWidget):
 
         self.topMoviesTable.resizeColumnsToContents()
 
-    def setActressAwards(self, wins, nominations):
-        self.actressDetail.awards = wins
-        self.actressDetail.nominations = nominations
+    def setActressAwards(self, awards):
+        awards = sortAwards(awards)
+        self.actressDetail.awards = awards
 
-        awardsText = "Nominations: " + \
-            str(nominations) + "\n" + "Awards: " + str(wins)
-        self.awardsText.setText(awardsText)
+        n = len(awards['year'])
+
+        for i in range(0, n):
+            self.awardsTable.insertRow(i)
+            self.awardsTable.setItem(
+                i, 0, QTableWidgetItem(awards['title'][i]))
+            self.awardsTable.setItem(
+                i, 1, QTableWidgetItem(awards['outcome'][i]))
+            self.awardsTable.setItem(
+                i, 2, QTableWidgetItem(awards['year'][i]))
+
+        self.awardsTable.resizeColumnsToContents()
 
     def setMoviesTableContent(self):
 
@@ -278,3 +298,22 @@ def getNumberBeforeSubString(string, subString) -> int:
         return int(numString[0])
     else:
         return 0
+
+
+def sortAwards(awards) -> dict:
+    n = len(awards['year'])
+
+    for i in range(n-1, 0, -1):
+        for j in range(0, i):
+            if awards['year'][j+1] < awards['year'][j]:
+                swapYear = awards['year'][j]
+                swapOutcome = awards['outcome'][j]
+                swapTitle = awards['title'][j]
+                awards['year'][j] = awards['year'][j+1]
+                awards['outcome'][j] = awards['outcome'][j+1]
+                awards['title'][j] = awards['title'][j+1]
+                awards['year'][j+1] = swapYear
+                awards['outcome'][j+1] = swapOutcome
+                awards['title'][j+1] = swapTitle
+
+    return awards

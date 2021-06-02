@@ -8,3 +8,5 @@ class ActressDetail():
         self.moviesDf = []
         self.about = ""
         self.avRating = 0.00
+        self.nominations = 0
+        self.awards = 0

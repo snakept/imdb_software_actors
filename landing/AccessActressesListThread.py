@@ -25,7 +25,7 @@ class AccessActressesListThread(QThread):
             self.actressesDf = actressesData['items']
 
             if len(self.actressesDf) == 0:
-                print("No data provided for the link " + self.actressesUrl)
+                ("No data provided for the link " + self.actressesUrl)
                 return
         else:
             print("Error occured fetch didn't succeed. Error code: " +

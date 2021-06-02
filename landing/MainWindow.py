@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.uic import loadUi
+from PyQt6.QtGui import QCloseEvent
 
 from detail.DetailView import DetailView
 from landing.ActressesListModel import ActressesListModel
@@ -9,10 +10,10 @@ from landing.AccessActressesListThread import AccessActressesListThread
 class MainWindow(QMainWindow):
     def __init__(self, apiKey, path):
         super().__init__()
+        self.apiKey = apiKey
         self.path = path
-        self.detailView = DetailView(apiKey, self.path)
+
         loadUi(self.path + "/Layouts/main_view.ui", self)
-        loadUi(self.path + "/Layouts/detail.ui", self.detailView)
 
         self.actressesUrl = self.actressesUrl = "https://imdb-api.com/en/API/IMDbList/" + \
             apiKey + "/ls053501318"
@@ -25,10 +26,14 @@ class MainWindow(QMainWindow):
         self.fetchButton.clicked.connect(self.fetchButtonClicked)
 
     def actressClicked(self, index):
+        self.detailView = DetailView(self.apiKey, self.path)
+        loadUi(self.path + "/Layouts/detail.ui", self.detailView)
+
         i = index.row()
         actressPixmap = self.actressesList[i].pixmap
         actressName = self.actressesList[i].name
         actressId = self.actressesList[i].id
+
         self.detailView.initContent(actressPixmap, actressName, actressId)
         self.detailView.show()
 

@@ -1,7 +1,4 @@
-from PyQt6 import QtGui
 from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtWidgets import QHBoxLayout, QLabel, QListWidgetItem, QVBoxLayout, QWidget
-from io import BytesIO
 
 
 class ActressListElement():

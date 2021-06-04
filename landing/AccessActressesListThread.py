@@ -31,18 +31,6 @@ class AccessActressesListThread(QThread):
             print("Error occured fetch didn't succeed. Error code: " +
                   actressesRequest.status_code)
 
-    # test
-    def loadFromFile(self):
-        self.actressesListData.clear()
-        self.started.emit(True)
-
-        try:
-            df = pd.read_json_normalize(self.actressesUrl)
-            self.actressesDf = df['items']
-
-        except:
-            print("Couldn't read data from " + self.actressesUrl)
-
     def fetchActress(self, actress):
 
         imageBin = req.get(actress['image']).content
@@ -52,10 +40,7 @@ class AccessActressesListThread(QThread):
         self.actressAddedSignal.emit(True)
 
     def run(self):
-        if self.actressesUrl.find("http") != -1:
-            self.fetchActressesDataFromUrl()
-        else:
-            self.loadFromFile()
+        self.fetchActressesDataFromUrl()
 
         for actress in self.actressesDf:
             self.fetchActress(actress)

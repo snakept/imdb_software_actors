@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.uic import loadUi
-from PyQt6.QtGui import QCloseEvent
 
 from detail.DetailView import DetailView
 from landing.ActressesListModel import ActressesListModel

@@ -1,0 +1,23 @@
+@startuml landing
+package landing <<Node>> {
+    class MainWindow {
+        apiKey: str
+        actressesList: list
+        actressesListView: QListView
+        fetchButton: QPushButton
+        actressClicked()
+        fetchButtonClicked()
+        startFetchingActresses()
+    }
+
+    class ActressesListModel
+
+    class AccessActressesListThread <extends QThread> {
+        run()
+        fetchActressesDataFromUrl()
+    }
+
+    MainWindow o-- AccessActressesListThread
+    MainWindow o--ActressesListModel
+}
+@enduml

@@ -1,0 +1,10 @@
+@startuml movies-data-worker-sequence 
+
+MainView -> DetailView: init Content
+DetailView -> MoviesDataWorker: fetch movie data
+MoviesDataWorker --> DetailView: send rating awards text genre table index
+DetailView -> MoviesTable: set rating awards genre
+DetailView -> AwardsLabel: set genre enumeration
+DetailView -> AvRatingLabel: set average rating
+
+@enduml

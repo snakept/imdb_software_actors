@@ -1,0 +1,9 @@
+@startuml actress-awardsdata-worker-sequence 
+
+MainView -> DetailView: init Content
+DetailView -> ActressAwardsDataWorker: request actress awards
+ActressAwardsDataWorker --> DetailView: send Awards
+DetailView -> AwardsTable: set Table data
+AwardsTable -> AwardsTable: resize Columns
+
+@enduml

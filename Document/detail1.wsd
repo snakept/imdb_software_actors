@@ -1,0 +1,25 @@
+@startuml detail1
+
+package detail <<Node>> {
+    class ActressDetail 
+
+    class DetailView {
+        apiKey: str
+        path: str
+        initContent()
+    }
+
+    class MoviesDataWorker
+
+    class ActressAwardsDataWorker
+    
+    DetailView o-- ActressDetail
+    DetailView o-- MoviesDataWorker
+    DetailView o-- ActressAwardsDataWorker
+}
+
+class MainView
+
+MainView o-- DetailView
+
+@enduml

@@ -29,7 +29,7 @@ class AccessActressesListThread(QThread):
                 return
         else:
             print("Error occured fetch didn't succeed. Error code: " +
-                  actressesRequest.status_code)
+                  str(actressesRequest.status_code))
 
     def fetchActress(self, actress):
 

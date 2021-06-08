@@ -2,18 +2,18 @@
 
 \usepackage[a4paper, left=3cm, right=2.5cm]{geometry}
 \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{blindtext}
 \usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{wrapfig}
 \usepackage{amsmath}
 \usepackage[absolute]{textpos}
 \usepackage{calc}
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{csquotes}
-\usepackage{graphicx}
-\usepackage{wrapfig}
-\usepackage[english]{babel}
-\usepackage{float}
-\usepackage{blindtext}
 
 \setcounter{secnumdepth}{4}
 \renewcommand{\baselinestretch}{1.2}
@@ -65,24 +65,34 @@
 \newpage
 
 \section{Project Description}
+This project mainly consists of creating a Python client to fetch data of the 
+\textit{IMDB Top 50 Actors and Actresseslist} and also gather their movie data. 
+The client uses an API to fetch all the basic actors/actresses list (\ref{list-actors}),
+the actor/actress About section (\ref{about}) and all their movies (\ref{movies}).
+For Sections \ref{awards} - \ref{top-movies} Web-scraping is used to 
+get awards data and ratings of the movies.
+The client is presented in a window based UserInterface where the user 
+can click to gather the wanted information.
+
+The further details of the specifics are handled in this document.
 
 \section{Tools, Modules and Data-Structure}
 
 \section{High-level Design}
 
 \section{Functionalities}
-\subsection{List of all available actors and actresses}
+\subsection{List of all available actors and actresses} \label{list-actors}
 
-\subsection{About the actor/actresses}
+\subsection{About the actor/actresses} \label{about}
 
-\subsection{All time movie names and years}
+\subsection{All time movie names and years} \label{movies}
 
-\subsection{Awards to actor/actresses in different years}
+\subsection{Awards to actor/actresses in different years} \label{awards}
 
-\subsection{Movie genre of actor/actresses}
+\subsection{Movie genre of actor/actresses} \label{genre}
 
-\subsection{Average rating of their movies}
+\subsection{Average rating of their movies} \label{average-rating}
 
-\subsection{Top 5 movies, their respective years and genre}
+\subsection{Top 5 movies, their respective years and genre} \label{top-movies}
 
 \end{document}

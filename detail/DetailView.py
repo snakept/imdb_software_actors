@@ -152,7 +152,7 @@ class DetailView(QWidget):
 
         # Average Rating
         self.avRatingLabel.setText(
-            "Average Rating: " + str(self.averageRating))
+            "Average Movie Rating: " + str(self.averageRating))
 
         # About Text
         self.aboutText.setPlainText(self.actressDetail.about)

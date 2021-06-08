@@ -141,3 +141,20 @@ dmypy.json
 #custom ignores
 playground.py
 test.ui
+
+#latex part
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.pytxcode
+
+.DS_Store

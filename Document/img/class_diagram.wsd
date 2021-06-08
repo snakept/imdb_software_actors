@@ -1,0 +1,14 @@
+@startuml Class Diagram 
+package main {
+    class MainWindow
+    class ActressesListModel
+    class AccessActressesListThread
+}
+
+package detail {
+    class DetailView
+    class DetailThread
+}
+
+MainWindow *-- DetailView
+@enduml

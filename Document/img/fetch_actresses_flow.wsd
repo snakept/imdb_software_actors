@@ -1,0 +1,12 @@
+@startuml fetch_actresses_flow
+
+actor User 
+
+MainWindow -> ActressesListModel: Initializing UI
+User -> MainWindow: Fetch Actresses List request
+MainWindow -> AccessActresssesListThread: Starting Fetch thread
+AccessActresssesListThread -> AccessActresssesListThread: API Call
+AccessActresssesListThread --> ActressesListModel: Providing data
+ActressesListModel --> MainWindow: Sending signal for layout update
+MainWindow -> MainWindow: Update actresses list view
+@enduml

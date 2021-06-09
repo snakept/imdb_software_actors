@@ -1,8 +1,4 @@
-import typing
-from PyQt6 import QtCore
-import PyQt6
-from PyQt6.QtCore import QAbstractListModel, QModelIndex, Qt, QVariant
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtCore import QAbstractListModel, QModelIndex, Qt
 
 from ActressListElement import ActressListElement
 

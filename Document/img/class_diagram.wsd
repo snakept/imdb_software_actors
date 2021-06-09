@@ -12,7 +12,6 @@ package imdb_software_actors {
     package detail {
         class ActressDetail
         class DetailView
-        class DetailViewModel
         class MoviesDataWorker
         class ActressAwardsDataWorker
     }
@@ -25,5 +24,4 @@ MainWindow o-- AccessActressesListThread
 DetailView o-- ActressDetail
 DetailView o-- ActressAwardsDataWorker
 DetailView o-- MoviesDataWorker
-DetailView o-- DetailViewModel
 @enduml

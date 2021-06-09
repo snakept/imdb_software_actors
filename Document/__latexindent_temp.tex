@@ -101,7 +101,7 @@ module \textit{SSL}. For most data I used a data frame created with \textit{Pand
 The Graphical UserInterface was implemented using \textit{PyQt6}. The framework also
 provides Thread libraries to help with multi-threading.
 
-\section{High-level Design}
+\section{Design}
 The client has one base module at the root of the project and the children modules 
 \textit{landing} and \textit{detail}.
 
@@ -113,7 +113,23 @@ The client has one base module at the root of the project and the children modul
       \end{center}
 \end{figure}
 
-While the base module contains the entry point in the \textit{main.py} file.
+While the base module only contains the entry point in the \textit{main.py} file,
+
+the \textit{landing} module handles the asynchronous fetching of the actresses 
+list (\ref{list-actors}), visualisation and interaction with the list and initializes an DetailView 
+from \textit{detail} when a list element gets accessed.
+\textit{MainWindow} is a QObject class which handles the UI update and communicates with 
+\textit{AccessActressesListThread} for data provision. For the ListView containing the actresses/actors 
+in MainWindow \textit{ActressesListModel} is used for correctly displaying the actor/actress data.
+\textit{ActressListElement} is a data wrapper for all the data to present in the list.
+
+The \textit{detail} module helds logic for fetching deeper information with multi-threading on 
+an actor or actress regarding ratings and awards. It also contains the code for UI displaying and 
+updates.
+The \textit{DetailView} class acts analogously to MainView as an controller for handling UI updates and
+triggering events on its threads. These threads manage the workers \textit{MoviesDataWorker} and 
+\textit{ActressAwardDataWorker} for retrieving the needed data. \textit{ActressDetail} functions as a 
+wrapper for a data instance.
 
 \section{Functionalities}
 \subsection{List of all available actors and actresses} \label{list-actors}

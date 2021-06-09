@@ -9,9 +9,4 @@ Assignment of summer semester 2021.
 
 # Execution
 
-python3 main.py [argument]
-
-Possible arguments:
-
-[imdb-api-key] : change the api-key to your own
-
+python3 main.py

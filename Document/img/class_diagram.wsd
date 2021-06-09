@@ -1,14 +1,27 @@
 @startuml Class Diagram 
+
 package main {
-    class MainWindow
-    class ActressesListModel
-    class AccessActressesListThread
+
+    class ActressListElement
+
+    package landing {
+        class MainWindow
+        class ActressesListModel
+        class AccessActressesListThread
+    }
+
+    package detail {
+        class ActressDetail
+        class DetailView
+        class DetailViewModel
+        class MoviesDataWorker
+        class ActressAwardsDataWorker
+    }
 }
 
-package detail {
-    class DetailView
-    class DetailThread
-}
-
-MainWindow *-- DetailView
+MainWindow o-- DetailView
+DetailView o-- ActressDetail
+DetailView o-- ActressAwardsDataWorker
+DetailView o-- MoviesDataWorker
+DetailView o-- DetailViewModel
 @enduml

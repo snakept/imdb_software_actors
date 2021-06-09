@@ -2,7 +2,7 @@
 
 actor User 
 
-MainWindow -> ActressesListModel: Initializing UI
+MainWindow -> MainWindow: Initializing UI
 User -> MainWindow: Fetch Actresses List request
 MainWindow -> AccessActresssesListThread: Starting Fetch thread
 AccessActresssesListThread -> AccessActresssesListThread: API Call

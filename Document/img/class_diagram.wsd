@@ -1,14 +1,27 @@
-@startuml Class Diagram 
-package main {
-    class MainWindow
-    class ActressesListModel
-    class AccessActressesListThread
+@startuml class_diagram
+
+package imdb_software_actors {
+
+    package landing {
+        class MainWindow
+        class ActressListElement
+        class ActressesListModel
+        class AccessActressesListThread
+    }
+
+    package detail {
+        class ActressDetail
+        class DetailView
+        class MoviesDataWorker
+        class ActressAwardsDataWorker
+    }
 }
 
-package detail {
-    class DetailView
-    class DetailThread
-}
-
-MainWindow *-- DetailView
+MainWindow o-- DetailView
+MainWindow o-- ActressesListModel
+MainWindow o-- ActressListElement: have 50
+MainWindow o-- AccessActressesListThread
+DetailView o-- ActressDetail
+DetailView o-- ActressAwardsDataWorker
+DetailView o-- MoviesDataWorker
 @enduml

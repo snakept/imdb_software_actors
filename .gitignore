@@ -3,6 +3,7 @@
 
 #VS Code
 *.code-workspace
+settings.json
 
 #test files
 test.py
@@ -156,5 +157,6 @@ test.ui
 *.synctex.gz
 *.toc
 *.pytxcode
+__latexindent_temp.tex
 
 .DS_Store

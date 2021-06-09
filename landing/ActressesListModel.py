@@ -1,7 +1,5 @@
 from PyQt6.QtCore import QAbstractListModel, QModelIndex, Qt
 
-from ActressListElement import ActressListElement
-
 
 class ActressesListModel(QAbstractListModel):
 

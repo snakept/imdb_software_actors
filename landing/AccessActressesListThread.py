@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QThread, pyqtSignal
 import pandas as pd
 import requests as req
-from ActressListElement import ActressListElement
+from landing.ActressListElement import ActressListElement
 
 
 class AccessActressesListThread(QThread):

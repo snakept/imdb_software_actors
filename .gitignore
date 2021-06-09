@@ -157,6 +157,6 @@ test.ui
 *.synctex.gz
 *.toc
 *.pytxcode
-_latex_indent_temp.tex
+__latex_indent_temp.tex
 
 .DS_Store

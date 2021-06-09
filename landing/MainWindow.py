@@ -9,14 +9,15 @@ from landing.AccessActressesListThread import AccessActressesListThread
 class MainWindow(QMainWindow):
     def __init__(self, apiKey, path):
         super().__init__()
+        # prepare the api call
+        self.actressesUrl = self.actressesUrl = "https://imdb-api.com/en/API/IMDbList/" + \
+            apiKey + "/ls053501318"
         self.apiKey = apiKey
         self.path = path
 
         loadUi(self.path + "/Layouts/main_view.ui", self)
 
-        self.actressesUrl = self.actressesUrl = "https://imdb-api.com/en/API/IMDbList/" + \
-            apiKey + "/ls053501318"
-
+        # setting up the list view for the actors/actresses
         self.actressesList = []
         self.model = ActressesListModel(self.actressesList)
         self.actressesListView.setModel(self.model)
@@ -25,9 +26,11 @@ class MainWindow(QMainWindow):
         self.fetchButton.clicked.connect(self.fetchButtonClicked)
 
     def actressClicked(self, index):
+        # prepare ui for the DetailView
         self.detailView = DetailView(self.apiKey, self.path)
         loadUi(self.path + "/Layouts/detail.ui", self.detailView)
 
+        # prepare data for DetailView
         i = index.row()
         actressPixmap = self.actressesList[i].pixmap
         actressName = self.actressesList[i].name
@@ -37,6 +40,7 @@ class MainWindow(QMainWindow):
         self.detailView.show()
 
     def fetchButtonClicked(self):
+        # only allow fetching of data when enabled
         if self.fetchButton.isEnabled:
             self.fetchButton.setEnabled(False)
             self.startFetchingActresses()

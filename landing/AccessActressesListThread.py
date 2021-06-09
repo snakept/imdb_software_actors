@@ -18,8 +18,11 @@ class AccessActressesListThread(QThread):
 
     def fetchActressesDataFromUrl(self):
         self.actressesListData.clear()
+        # so button can be disabled
         self.started.emit(True)
         actressesRequest = req.get(self.actressesUrl)
+
+        # when status is ok read actresses into dataframe
         if actressesRequest.status_code == 200:
             actressesData = pd.read_json(actressesRequest.content)
             self.actressesDf = actressesData['items']
@@ -37,6 +40,8 @@ class AccessActressesListThread(QThread):
         actressListItem = ActressListElement(
             actress['fullTitle'], actress['id'], imageBin)
         self.actressesListData.append(actressListItem)
+
+        # to handle layout adaption
         self.actressAddedSignal.emit(True)
 
     def run(self):
@@ -45,4 +50,5 @@ class AccessActressesListThread(QThread):
         for actress in self.actressesDf:
             self.fetchActress(actress)
 
+        # to enable fetch button again
         self.finished.emit(True)

@@ -1,4 +1,4 @@
-
+# All data of the Actress in DetailView
 class ActressDetail():
     def __init__(self, id, name, pixmap):
         self.id = id

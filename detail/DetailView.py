@@ -1,5 +1,4 @@
 import ssl
-import re
 
 import pandas as pd
 import requests as req
@@ -28,12 +27,13 @@ class MoviesDataWorker(QObject):
 
         for i, _ in self.moviesDf.iterrows():
 
+            # get the html from a movie
             url = "https://www.imdb.com/title/" + \
                 self.moviesDf.at[i, 'id']
             page = req.get(url)
             soup = BeautifulSoup(page.text, 'html.parser')
 
-            # Rating
+            # Extract the rating
             ratingSpan = soup.select_one(
                 'span[class*="AggregateRatingButton__RatingScore"]')
             rating = -1.0
@@ -41,7 +41,7 @@ class MoviesDataWorker(QObject):
                 ratingString = ratingSpan.text
                 rating = float(ratingString)
 
-            # Awards
+            # Extract the awards
             awardsText = ""
             awardsContainer = soup.find(
                 'div', attrs={'data-testid': "tmd_awards"})
@@ -73,11 +73,12 @@ class ActressAwardsDataWorker(QObject):
     @pyqtSlot()
     def fetchAwardsData(self):
 
+        # get the html from a actor/actress
         url = "https://www.imdb.com/name/" + self.actressId + "/awards"
-
         page = req.get(url)
         soup = BeautifulSoup(page.text, 'html.parser')
 
+        # prepare for awards extraction by list all awards elements
         awardsSoup = soup.find_all('table', attrs={'class': 'awards'})
         awards = {"title": [], "outcome": [], "year": []}
         for award in awardsSoup:
@@ -112,11 +113,13 @@ class DetailView(QWidget):
     ratingCount = 0
     averageRating = 0.0
 
+    # preparation of DetailView
     def __init__(self, apiKey, path):
         super().__init__()
         self.apiKey = apiKey
         self.path = path
 
+    # handling Detail Window close events
     def closeEvent(self, a0: QCloseEvent):
         self.workerMoviesThread.terminate()
         self.workerActressAwardsThread.terminate()
@@ -124,12 +127,14 @@ class DetailView(QWidget):
 
         return super().closeEvent(a0)
 
+    # handling the handover of actor click in MainWindow
     def initContent(self, pixmap, name, id):
+        ssl._create_default_https_context = ssl._create_unverified_context
         self.actressUrl = API_URL + self.apiKey + "/" + id
+
         self.actressDetail = ActressDetail(id, name, pixmap)
 
-        ssl._create_default_https_context = ssl._create_unverified_context
-
+        # Extraction of the actor/actress movies list
         jsonData = req.get(self.actressUrl).json()
         df = pd.DataFrame(jsonData['castMovies'])
         df['awards'] = "none"
@@ -175,11 +180,12 @@ class DetailView(QWidget):
         self.topMoviesTable.setHorizontalHeaderLabels(headerTopMovies)
         self.topMoviesTable.verticalHeader().setVisible(False)
 
+        # initializing threads by moving workers to them
         # MoviesWorker
         self.workerMovies = MoviesDataWorker(self.actressDetail.moviesDf)
         self.workerMoviesThread = QThread()
 
-        self.workerMovies.fetchedData.connect(self.useMovieDataAt)
+        self.workerMovies.fetchedData.connect(self.useDataOfMovieWorkerAt)
         self.workerMovies.finished.connect(self.setTop5Movies)
         self.requestedMovieRatingFetch.connect(
             self.workerMovies.fetchMovieData)
@@ -187,14 +193,15 @@ class DetailView(QWidget):
 
         self.workerMoviesThread.start()
 
-        self.setMoviesTableContent()
+        self.addMoviesToTable()
 
         # ActressAwardsWorker
         self.workerActressAwards = ActressAwardsDataWorker(
             self.actressDetail.id)
         self.workerActressAwardsThread = QThread()
 
-        self.workerActressAwards.fetchedData.connect(self.setActressAwards)
+        self.workerActressAwards.fetchedData.connect(
+            self.useDataOfAwardsWorker)
         self.requestActressAwards.connect(
             self.workerActressAwards.fetchAwardsData)
         self.workerActressAwards.moveToThread(self.workerActressAwardsThread)
@@ -202,7 +209,7 @@ class DetailView(QWidget):
         self.workerActressAwardsThread.start()
         self.requestActressAwards.emit()
 
-    def useMovieDataAt(self, rating, awards, genre, index):
+    def useDataOfMovieWorkerAt(self, rating, awards, genre, index):
 
         # Awards
         self.actressDetail.moviesDf.at[index, 'awards'] = awards
@@ -240,6 +247,7 @@ class DetailView(QWidget):
                 "Average Rating: " + str(round(self.averageRating, 2)))
 
         else:
+            # set template if not available
             self.moviesTableView.setItem(index, 4, QTableWidgetItem("-.-"))
 
         self.moviesTableView.resizeColumnsToContents()
@@ -258,12 +266,14 @@ class DetailView(QWidget):
 
         self.topMoviesTable.resizeColumnsToContents()
 
-    def setActressAwards(self, awards):
+    def useDataOfAwardsWorker(self, awards):
+        # sort by year
         awards = sortAwards(awards)
         self.actressDetail.awards = awards
 
         n = len(awards['year'])
 
+        # fill the awards table
         for i in range(0, n):
             self.awardsTable.insertRow(i)
             self.awardsTable.setItem(
@@ -275,9 +285,9 @@ class DetailView(QWidget):
 
         self.awardsTable.resizeColumnsToContents()
 
-    def setMoviesTableContent(self):
+    def addMoviesToTable(self):
 
-        # Add Movies to table
+        # Iterate through the actress movies
         for i, movie in self.actressDetail.moviesDf.iterrows():
             title = movie['title']
             year = movie['year']
@@ -288,18 +298,13 @@ class DetailView(QWidget):
             self.moviesTableView.setItem(
                 i, 1, QTableWidgetItem(year))
 
+        # to start thread for MoviesWorker
         self.requestedMovieRatingFetch.emit()
+
         self.moviesTableView.resizeColumnsToContents()
 
 
-def getNumberBeforeSubString(string, subString) -> int:
-    numString = re.findall("(\d+) *" + subString + "*", string)
-    if len(numString) > 0:
-        return int(numString[0])
-    else:
-        return 0
-
-
+# bubble sort of awards by year
 def sortAwards(awards) -> dict:
     n = len(awards['year'])
 

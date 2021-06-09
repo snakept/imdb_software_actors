@@ -14,8 +14,10 @@ class ActressesListModel(QAbstractListModel):
 
     def data(self, index: QModelIndex, role: int):
 
+        # when the item is for displaying text
         if role == Qt.ItemDataRole.DisplayRole:
             return self.listData[index.row()].name
 
+        # when the item is for displaying icon
         if role == Qt.ItemDataRole.DecorationRole:
             return self.listData[index.row()].icon

@@ -70,16 +70,16 @@ This project mainly consists of creating a Python client to fetch data of the
 \textit{IMDB Top 50 Actors and Actresseslist} and also gather their movie data. 
 The client uses an API to fetch all the basic actors/actresses list (\ref{list-actors}),
 the actor/actress About section (\ref{about}) and all their movies (\ref{movies}).
-For Sections \ref{awards} - \ref{top-movies} Web-scraping is used to 
+For the functionalities \ref{awards} - \ref{top-movies} Web-scraping is used to 
 get awards data and ratings of the movies.
-The client is presented in a window based UserInterface where the user 
+The client is presented in a window based User Interface where the user 
 can click to gather the wanted information.
 
-The specifics are handled in this document.
+The specifics of the project will be discussed in this document.
 
 \section{Tools, Modules and Data-Structure}
 \subsection{Presentation Tools}
-For presenting the project I also used VS Code. I wrote the reports in \textit{\LaTeX} with the help of the \textit{LaTex Workshop} extension and 
+For presenting the project I used Visual Studio Code. I wrote the reports in \textit{\LaTeX} with the help of the \textit{LaTex Workshop} extension and 
 \textit{PlantUml} to present core structures and flows of the client.
 In the presentation of the client I used \textit{Powerpoint}. 
 
@@ -99,7 +99,7 @@ When it comes to the modules, \textit{Requests} and \textit{BeautifulSoup 4} wer
 necessary to handle all the web scraping. The http context is created with the 
 module \textit{SSL}. For most data I used a data frame created with \textit{Pandas}.
 
-The Graphical UserInterface was implemented using \textit{PyQt6}. The framework also
+The Graphical User Interface was implemented using \textit{PyQt6}. The framework also
 provides Thread libraries to help with multi-threading.
 
 \section{Design}
@@ -146,9 +146,9 @@ In this section all the necessary specifications for the project will be further
       \caption[width=0.45\textwidth]{\label{fig:main-window-screen} screenshot of the MainView}
 \end{figure}
 
-When the user clicks on the \textit{Fetch Button} the sequence \ref{fig:fetch-actresses-flow} starts
+When the user clicks on the \textit{Fetch Button} the sequence in figure \ref{fig:fetch-actresses-flow} starts
 and everytime a new actor/actress is published in actresses list the the actresses table view gets 
-updated so the user sees the update process. Here the \textit{IMDB-Api} is used. The extracted JSON file gets translated into a dataframe. Since the fetching is executed in a seperate thread, the 
+updated so the user sees the update process. Here the \textit{IMDB-API} is used. The extracted JSON file gets translated into a dataframe. Since the fetching is executed in a seperate thread, the 
 main thread is not blocked and the UI is responsive. At any time the user can click on the list element
 to transition to DetailView of the actress.
 
@@ -160,7 +160,7 @@ to transition to DetailView of the actress.
 
 
 \subsection{About the actor/actresses} \label{about}
-With a new API call to the actress list of the clicked actress/actor in the MainView 
+With a new API call with the id of the clicked actress/actor in the MainView 
 a new dataframe with Pandas gets created. A short summary for each actor/actress is provided and
 therfore used in a textfield. You can see the result in the upper left area of 
 fig \ref{fig:detail-window-screen}.
@@ -199,7 +199,7 @@ execution attached to a seperate thread.
 The worker fetches the awards url
 of an actor and uses BeautifulSoup to extract a list of awards with the 
 outcome (Nominee or Winner) and also the respective year. By iterating over 
-the list the awards table get filled (fig \ref{fig:awardsdata-worker-sequence}).
+the list the awards table gets filled (fig \ref{fig:awardsdata-worker-sequence}).
 
 \textbf{Main methods:}
 \begin{itemize}
@@ -214,7 +214,7 @@ the list the awards table get filled (fig \ref{fig:awardsdata-worker-sequence}).
 \end{figure}
 
 The worker MoviesDataWorker also gets attached to a thread. After the movies table 
-is filled with all the movies. The worker iterates over every movie element in the 
+is filled with the movies. The worker iterates over every movie element in the 
 actress movie dataframe and uses the id to fetch the movie site with BeautifulSoup (fig. \ref{fig:movies-data-worker-sequence})
 
 \textbf{Main methods:}
@@ -223,7 +223,7 @@ actress movie dataframe and uses the id to fetch the movie site with BeautifulSo
 \end{itemize}
 
 \subsection{Average rating of their movies} \label{average-rating}
-While the iteration in \ref{genre} happens everytime when a rating value for the movie exists
+While the iteration in figure \ref{genre} happens everytime when a rating value for the movie exists
 a counter gets incremented and the rating is added to an overall rating. The average rating of all
 the movies is created and the UI is updated every iteration.
 

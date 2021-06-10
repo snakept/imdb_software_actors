@@ -1,12 +1,11 @@
 import os
 import sys
+import random
 from PyQt6.QtWidgets import QApplication
 
 from landing.MainWindow import MainWindow
 
-DEFAULT_API_KEY = "k_vhvsnz5j"
-OTHER_API_KEY = "k_66k35hbm"
-ANOTHER_API_KEY = "k_1dlps7sm"
+API_KEY_LIST = ["k_vhvsnz5j", "k_66k35hbm", "k_1dlps7sm"]
 
 if __name__ == "__main__":
     path = os.path.realpath(__file__)
@@ -14,9 +13,10 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
 
-    apiKey = ANOTHER_API_KEY
-    if len(sys.argv) > 1:
-        apiKey = sys.argv[1]
+    # random choice for maximal api calls
+    choice = int(3.0 * random.random())
+
+    apiKey = API_KEY_LIST[choice]
 
     window = MainWindow(apiKey, path)
     window.show()

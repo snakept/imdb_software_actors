@@ -53,7 +53,7 @@
 
             \vspace{6cm}
 
-            \textbf{Task 4 Document - Project Report}
+            \textbf{Task 4 - Project Report}
 
             \vspace{10cm}
       \end{center}
@@ -148,14 +148,43 @@ In this section all the necessary specifications for the project will be further
 
 When the user clicks on the \textit{Fetch Button} the sequence \ref{fig:fetch-actresses-flow} starts
 and everytime a new actor/actress is published in actresses list the the actresses table view gets 
-updated so the user sees the update process. Since the fetching is executed in a seperate thread, the 
+updated so the user sees the update process. Here the \textit{IMDB-Api} is used. The extracted JSON file gets translated into a dataframe. Since the fetching is executed in a seperate thread, the 
 main thread is not blocked and the UI is responsive. At any time the user can click on the list element
 to transition to DetailView of the actress.
 
+\textbf{Main methods:} 
+\begin{itemize}
+      \item \textit{fetchActressesDataFromUrl(self)}
+      \item \textit{fetchActress(self)}
+\end{itemize}
+
 
 \subsection{About the actor/actresses} \label{about}
+With a new API call to the actress list of the clicked actress/actor in the MainView 
+a new dataframe with Pandas gets created. A short summary for each actor/actress is provided and
+therfore used in a textfield. You can see the result in the upper left area of 
+fig \ref{fig:detail-window-screen}.
+
+\textbf{Main methods:}
+\begin{itemize}
+      \item initContent(self, pixmap, name, id)
+\end{itemize}
+
+\begin{figure}[h]
+      \centering
+      \includegraphics[width=0.7\textwidth]{img/detail-window-screen.png}
+      \caption{\label{fig:detail-window-screen} screenshot of the DetailView}
+\end{figure}
 
 \subsection{All time movie names and years} \label{movies}
+The API call of \ref{about} is also used to gather all movies and their release years of
+the provided dataframe. To fill the movies table in the bottom of fig \ref{fig:detail-window-screen} the dataframe gets iterated using the iterrows property of the
+dataframe. To display every item correctly, the columns get updated for every insert.
+
+\textbf{Main methods:}
+\begin{itemize}
+      \item initContent(self, pixmap, name, id)
+\end{itemize}
 
 \subsection{Awards to actor/actresses in different years} \label{awards}
 

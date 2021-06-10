@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
 
-    # random choice of api key because only 100 are possible per day
+    # random choice of api key because only 100 calls are possible per day
     apiKey = random.choice(API_KEY_LIST)
 
     window = MainWindow(apiKey, path)

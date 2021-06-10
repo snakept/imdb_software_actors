@@ -183,15 +183,64 @@ dataframe. To display every item correctly, the columns get updated for every in
 
 \textbf{Main methods:}
 \begin{itemize}
-      \item initContent(self, pixmap, name, id)
+      \item \textit{initContent(self, pixmap, name, id)}
 \end{itemize}
 
 \subsection{Awards to actor/actresses in different years} \label{awards}
+As the DetailView is presented the ActressAwardDataWorker is triggered for 
+execution attached to a seperate thread. 
+
+\begin{figure}[h]
+      \centering
+      \includegraphics[width=0.7\textwidth]{img/actress-awardsdata-worker-sequence.png}
+      \caption{\label{fig:awardsdata-worker-sequence} flowchart of AwardsDataWorker}
+\end{figure}
+
+The worker fetches the awards url
+of an actor and uses BeautifulSoup to extract a list of awards with the 
+outcome (Nominee or Winner) and also the respective year. By iterating over 
+the list the awards table get filled (fig \ref{fig:awardsdata-worker-sequence}).
+
+\textbf{Main methods:}
+\begin{itemize}
+      \item \textit{fetchAwardsData(self)}
+\end{itemize}
 
 \subsection{Movie genre of actor/actresses} \label{genre}
+\begin{figure}[H]
+      \centering
+      \includegraphics[width=0.8\textwidth]{img/movies-data-worker-sequence.png}
+      \caption{\label{fig:movies-data-worker-sequence} flowchart of MoviesDataWorker}
+\end{figure}
+
+The worker MoviesDataWorker also gets attached to a thread. After the movies table 
+is filled with all the movies. The worker iterates over every movie element in the 
+actress movie dataframe and uses the id to fetch the movie site with BeautifulSoup (fig. \ref{fig:movies-data-worker-sequence})
+
+\textbf{Main methods:}
+\begin{itemize}
+      \item \textit{fetchMovieData(self)}
+\end{itemize}
 
 \subsection{Average rating of their movies} \label{average-rating}
+While the iteration in \ref{genre} happens everytime when a rating value for the movie exists
+a counter gets incremented and the rating is added to an overall rating. The average rating of all
+the movies is created and the UI is updated every iteration.
+
+\textbf{Main methods:}
+\begin{itemize}
+      \item \textit{fetchMovieData(self)}
+\end{itemize}
 
 \subsection{Top 5 movies, their respective years and genre} \label{top-movies}
+After the MoviesDataWorker (fig. \ref{fig:awardsdata-worker-sequence}) is finished it sends a
+signal and the \textit{setTop5Movies} method gets called. To get the top 5 elements Pandas methods
+\textit{sort\_values} for sorting and then \textit{head} is used. Now the table for top movies can
+easily be filled.
+
+\textbf{Main methods:}
+\begin{itemize}
+      \item \textit{setTop5Movies(self)}
+\end{itemize}
 
 \end{document}

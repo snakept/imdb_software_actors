@@ -3,6 +3,7 @@
 \usepackage[a4paper, left=3cm, right=2.5cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage{subfigure}
 \usepackage{blindtext}
 \usepackage{microtype}
 \usepackage{graphicx}
@@ -137,13 +138,20 @@ wrapper for a data instance.
 In this section all the necessary specifications for the project will be further discussed.
 
 \subsection{List of all available actors and actresses} \label{list-actors}
-\begin{figure}[H]
-      \begin{center}
-            \includegraphics[scale=0.4]{img/fetch_actresses_flow.png}
-            \caption{\label{fig:fetch-actresses-flow} Main flow of accessing the actresses list data
-            by the user.}
-      \end{center}
+\begin{figure}[h]
+      \centering
+      \includegraphics[width=0.45\textwidth]{img/fetch_actresses_flow.png}
+      \caption[width=0.45\textwidth]{\label{fig:fetch-actresses-flow} Main flow of fetching actresses list}
+      \includegraphics[width=0.45\textwidth]{img/main-window-screen.png}
+      \caption[width=0.45\textwidth]{\label{fig:main-window-screen} screenshot of the MainView}
 \end{figure}
+
+When the user clicks on the \textit{Fetch Button} the sequence \ref{fig:fetch-actresses-flow} starts
+and everytime a new actor/actress is published in actresses list the the actresses table view gets 
+updated so the user sees the update process. Since the fetching is executed in a seperate thread, the 
+main thread is not blocked and the UI is responsive. At any time the user can click on the list element
+to transition to DetailView of the actress.
+
 
 \subsection{About the actor/actresses} \label{about}
 

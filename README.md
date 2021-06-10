@@ -9,11 +9,11 @@ Assignment of summer semester 2021.
 Python3.x.x
 
 # Module Requirements
-The modules can be installed with pip via python3 -m pip -r requirements.txt
-pandas==1.2.4
-requests==2.25.1
-beautifulsoup4==4.9.3
-PyQt6==6.1.0
+The modules can be installed with pip via python3 -m pip -r requirements.txt <br>
+pandas==1.2.4 <br>
+requests==2.25.1 <br>
+beautifulsoup4==4.9.3 <br>
+PyQt6==6.1.0 <br>
 
 # Execution
 python3 main.py
